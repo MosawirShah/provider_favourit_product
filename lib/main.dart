@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_favourit/my_favourit.dart';
 
 import 'favourit_provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(create: (_) => FavouritProvider(),
-        child: MyApp()),
-    );
+    ChangeNotifierProvider(create: (_) => FavouritProvider(), child: MyApp()),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -20,12 +20,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     print("Build");
-    final provider = Provider.of<FavouritProvider>(context,listen: false);
+    final provider = Provider.of<FavouritProvider>(context, listen: false);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -35,6 +34,19 @@ class _MyAppState extends State<MyApp> {
           ),
           centerTitle: true,
           backgroundColor: Colors.amber,
+          actions: [
+            InkWell(
+              onTap: (){
+                print("hi");
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => MyFavourit()));
+              },
+                child: Icon(
+              Icons.favorite,
+              color: Colors.red,
+              size: 30,
+            )),
+          ],
         ),
         body: ListView.builder(
             itemCount: 40,
@@ -47,12 +59,18 @@ class _MyAppState extends State<MyApp> {
                 child: ListTile(
                   leading: Text("index$index"),
                   trailing: IconButton(
-              onPressed: () {
-              provider.addToFavourit(index);
-              },
+                    onPressed: () {
+                      if (provider.itemList.contains(index)) {
+                        provider.removeFromFavourit(index);
+                      } else {
+                        provider.addToFavourit(index);
+                      }
+                    },
                     icon: Consumer<FavouritProvider>(
-                      builder: (context, consumer, child){
-                        return Icon(consumer.itemList.contains(index)?Icons.favorite:Icons.favorite_outline);
+                      builder: (context, consumer, child) {
+                        return Icon(consumer.itemList.contains(index)
+                            ? Icons.favorite
+                            : Icons.favorite_outline);
                       },
                     ),
                   ),
@@ -63,7 +81,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
 
 //WITHOUT PROVIDER
 // class _MyAppState extends State<MyApp> {

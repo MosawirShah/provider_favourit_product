@@ -9,4 +9,9 @@ class FavouritProvider with ChangeNotifier{
    _itemList.add(index);
    notifyListeners();
   }
+
+  void removeFromFavourit(int index){
+    _itemList.remove(index);
+    notifyListeners();
+  }
 }
