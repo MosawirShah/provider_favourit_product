@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_favourit/favourit_provider.dart';
 class MyFavourit extends StatelessWidget {
-  const MyFavourit({Key? key}) : super(key: key);
+   MyFavourit({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class MyFavourit extends StatelessWidget {
           itemCount: provider.itemList.length,
           itemBuilder: (context, index){
         return ListTile(
-          title: Text("index$index"),
+          title: Text("index${provider.itemList[index]}"),
 
         );
       }),

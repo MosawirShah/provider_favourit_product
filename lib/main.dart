@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_favourit/my_favourit.dart';
+import 'my_favourit.dart';
 
 import 'favourit_provider.dart';
 
@@ -24,63 +25,94 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     print("Build");
-    final provider = Provider.of<FavouritProvider>(context, listen: false);
+   // final provider = Provider.of<FavouritProvider>(context, listen: false);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Favourit Products",
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.amber,
-          actions: [
-            InkWell(
-              onTap: (){
-                print("hi");
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => MyFavourit()));
-              },
-                child: Icon(
-              Icons.favorite,
-              color: Colors.red,
-              size: 30,
-            )),
-          ],
+      home:HomeScreen(),
+    );
+  }
+}
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<FavouritProvider>(context, listen: false);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Favourit Products",
         ),
-        body: ListView.builder(
-            itemCount: 40,
-            itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.all(10),
-                height: 60,
+        centerTitle: true,
+        backgroundColor: Colors.amber,
+        actions: [
+          InkWell(
+              onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => MyFavourit())),
+              child: Icon(
+                Icons.favorite,
+                color: Colors.red,
+                size: 30,
+              )),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Container(
+              // padding: EdgeInsets.all(20),
+                margin: EdgeInsets.all(20),
+                height: 40,
                 width: 280,
-                color: Colors.amber[100],
-                child: ListTile(
-                  leading: Text("index$index"),
-                  trailing: IconButton(
-                    onPressed: () {
-                      if (provider.itemList.contains(index)) {
-                        provider.removeFromFavourit(index);
-                      } else {
-                        provider.addToFavourit(index);
-                      }
-                    },
-                    icon: Consumer<FavouritProvider>(
-                      builder: (context, consumer, child) {
-                        return Icon(consumer.itemList.contains(index)
-                            ? Icons.favorite
-                            : Icons.favorite_outline);
-                      },
-                    ),
-                  ),
-                ),
-              );
-            }),
+                color: Colors.amber,
+                child: RawMaterialButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyFavourit()));
+                  },
+                  child: Text("press"),
+                )),
+          ),
+          Expanded(
+            flex: 6,
+            child: Container(
+              child: ListView.builder(
+                  itemCount: 40,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.all(10),
+                      height: 60,
+                      width: 280,
+                      color: Colors.amber[100],
+                      child: ListTile(
+                        leading: Text("index$index"),
+                        trailing: IconButton(
+                          onPressed: () {
+                            if (provider.itemList.contains(index)) {
+                              provider.removeFromFavourit(index);
+                            } else {
+                              provider.addToFavourit(index);
+                            }
+                          },
+                          icon: Consumer<FavouritProvider>(
+                            builder: (context, consumer, child) {
+                              return Icon(consumer.itemList.contains(index)
+                                  ? Icons.favorite
+                                  : Icons.favorite_outline);
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
 
 //WITHOUT PROVIDER
 // class _MyAppState extends State<MyApp> {
